@@ -1,18 +1,26 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <form class="form-inline my-2">
+      <input
+        v-model="search"
+        class="form-control mx-2"
+        type="search"
+        placeholder="Search"
+        aria-label="Search"
+      />
+      <button class="btn btn-outline-success mx-2 my-2" type="submit">
+        Search
+      </button>
+    </form>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
+  name: 'PhHome',
+  data() {
+    return {
+      search: ''
+    }
   }
 }
 </script>
