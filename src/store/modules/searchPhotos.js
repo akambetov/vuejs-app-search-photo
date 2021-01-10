@@ -1,4 +1,4 @@
-import apiUnsplashSearch from '@/api/unsplashSearch'
+import apiUnsplashSearch from '@/api/unsplash'
 const state = {
   isLoading: false,
   data: null,
