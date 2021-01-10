@@ -9,6 +9,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
+  },
+  {
+    path: '/results/:query',
+    name: 'results',
+    component: Home
   }
   // {
   //   path: '/about',
