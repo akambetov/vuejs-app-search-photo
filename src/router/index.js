@@ -14,6 +14,12 @@ const routes = [
     path: '/results/:query',
     name: 'results',
     component: Home
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Favorites.vue')
   }
   // {
   //   path: '/about',
