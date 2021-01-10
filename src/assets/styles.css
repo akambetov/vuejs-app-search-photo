@@ -32,7 +32,7 @@
 }
 
 .like__button:hover .like__icon {
-  fill: red;
+  fill: #000;
 }
 .download__link:hover .download__icon {
   fill: #000;
@@ -41,3 +41,13 @@
 .card:hover .controls {
   opacity: 1;
 }
+
+.liked .like__button {
+  background-color: red;
+}
+/* .liked .like__icon {
+  fill: #bbb;
+}
+.liked .like__button:hover .like__icon {
+  fill: #bbb;
+} */
