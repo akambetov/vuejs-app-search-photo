@@ -2,10 +2,9 @@ import apiUnsplashSearch from '@/api/unsplash'
 const state = {
   isLoading: false,
   data: null,
-  error: null,
+  error: null
   // 1
   // queries: [],
-  favorites: []
 }
 
 export const mutatuionTypes = {
