@@ -1,0 +1,43 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+.controls {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  opacity: 0;
+  transition: opacity .2s linear;
+}
+.like__button,
+.download__link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 3px;
+  height: 32px;
+  width: 40px;
+  border: none;
+  /* border: 1px solid #ccc; */
+  border-radius: 3px;
+  background-color: #fff;
+}
+.like__icon,
+.download__icon {
+  height: 16px;
+  width: 16px;
+  display: block;
+  fill: #bbb;
+}
+
+.like__button:hover .like__icon {
+  fill: red;
+}
+.download__link:hover .download__icon {
+  fill: #000;
+}
+
+.card:hover .controls {
+  opacity: 1;
+}
