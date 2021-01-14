@@ -31,23 +31,18 @@
   fill: #bbb;
 }
 
-.like__button:hover .like__icon {
-  fill: #000;
-}
+.like__button:hover .like__icon,
 .download__link:hover .download__icon {
-  fill: #000;
+  fill: #EB4C2F;
 }
-
 .card:hover .controls {
   opacity: 1;
 }
 
 .liked .like__button {
-  background-color: red;
+  background-color: #EB4C2F;
 }
-/* .liked .like__icon {
-  fill: #bbb;
-}
+.liked .like__icon,
 .liked .like__button:hover .like__icon {
-  fill: #bbb;
-} */
+  fill: #F6F03D;
+}
