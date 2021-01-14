@@ -1,9 +1,19 @@
 <template>
   <div class="row row-cols-1 row-cols-md-2">
-    <div v-for="photo in photos" :key="photo.id" class="col mb-4">
+    <div
+      v-for="photo in photos"
+      :key="photo.id"
+      class="col mb-4"
+      :class="{ liked: photo.LIKED }"
+    >
       <div class="card">
         <div class="controls">
-          <button title="Like photo" type="button" class="like__button">
+          <button
+            title="Like photo"
+            type="button"
+            class="like__button"
+            @click="likePhoto(photo.id)"
+          >
             <svg version="1.1" viewBox="0 0 32 32" class="like__icon">
               <path
                 d="M17.4 29c-.8.8-2 .8-2.8 0l-12.3-12.8c-3.1-3.1-3.1-8.2 0-11.4 3.1-3.1 8.2-3.1 11.3 0l2.4 2.8 2.3-2.8c3.1-3.1 8.2-3.1 11.3 0 3.1 3.1 3.1 8.2 0 11.4l-12.2 12.8z"
@@ -30,23 +40,29 @@
           class="card-img-top"
           :alt="photo.alt_description"
         />
-        <!-- <div class="card-body">
+        <div class="card-body">
           <h5 class="card-title">{{ photo.alt_description }}</h5>
           <p class="card-text">
             {{ photo.description }}
           </p>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { actionTypes } from '@/store/modules/searchPhotos'
 export default {
   name: 'PhPhotos',
   props: {
     photos: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    likePhoto(id) {
+      this.$store.dispatch(actionTypes.likePhoto, { id })
     }
   }
 }
