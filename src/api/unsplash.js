@@ -5,7 +5,12 @@ const searchPhotos = (query, orientation) =>
     .get(
       `/search/photos?client_id=${accesKey}&query=${query}&orientation=${orientation}`
     )
-    .then(response => response.data.results)
+    .then(response => {
+      response.data.results.forEach(result => {
+        result.LIKED = false
+      })
+      return response.data.results
+    })
 
 export default {
   searchPhotos
