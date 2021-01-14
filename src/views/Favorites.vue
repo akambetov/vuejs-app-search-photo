@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import { getterTypes } from '@/store/modules/searchPhotos'
 import PhPhotos from '@/components/Photos'
 export default {
   name: 'PhFavorites',
@@ -11,8 +12,8 @@ export default {
     PhPhotos
   },
   computed: {
-    ...mapState({
-      favorites: state => state.favorites.favorites
+    ...mapGetters({
+      favorites: getterTypes.favorites
     })
   }
 }
