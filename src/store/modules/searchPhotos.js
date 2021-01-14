@@ -9,8 +9,8 @@ const state = {
 
 export const mutatuionTypes = {
   searchPhotosStart: '[searchPhotos] Search photos start',
-  searchPhotosSuccess: '[searchPhotos] Search photos Success',
-  searchPhotosFailure: '[searchPhotos] Search photos start'
+  searchPhotosSuccess: '[searchPhotos] Search photos success',
+  searchPhotosFailure: '[searchPhotos] Search photos failure'
 }
 
 export const actionTypes = {
