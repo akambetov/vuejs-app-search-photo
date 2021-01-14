@@ -1,47 +1,112 @@
 import apiUnsplashSearch from '@/api/unsplash'
+import { setItem, removeItem, getItem, LSPhotos } from '@/utils/localStorage'
+
 const state = {
   isLoading: false,
   data: null,
+  likedPhotos: { photos: [] },
+  // photoIDs: [],
   error: null
-  // 1
-  // queries: [],
 }
 
-export const mutatuionTypes = {
+export const mutationTypes = {
   searchPhotosStart: '[searchPhotos] Search photos start',
   searchPhotosSuccess: '[searchPhotos] Search photos success',
-  searchPhotosFailure: '[searchPhotos] Search photos failure'
+  searchPhotosFailure: '[searchPhotos] Search photos failure',
+
+  likePhotoStart: '[searchPhotos] Like photo start',
+  likePhotoSuccess: '[searchPhotos] Like photo success',
+  likePhotoFailure: '[searchPhotos] Like photo failure',
+
+  getLocalStorageStart: '[searchPhotos] Initalize Local Storage start',
+  getLocalStorageSuccess: '[searchPhotos] Initalize Local Storage success',
+  getLocalStorageFailure: '[searchPhotos] Initalize Local Storage failure'
 }
 
 export const actionTypes = {
-  searchPhotos: '[searchPhotos] Search photos'
+  searchPhotos: '[searchPhotos] Search photos',
+  likePhoto: '[searchPhotos] Like photos',
+  getLocalStorage: '[searchPhotos] Initalize Local Storage'
+}
+
+export const getterTypes = {
+  favorites: '[searchPhotos] Favorites'
 }
 
 const mutations = {
-  [mutatuionTypes.searchPhotosStart](state) {
+  [mutationTypes.searchPhotosStart](state) {
     state.data = null
     state.isLoading = true
     state.error = null
   },
-  [mutatuionTypes.searchPhotosSuccess](state, payload) {
+  [mutationTypes.searchPhotosSuccess](state, payload) {
     state.data = payload
     state.isLoading = false
-    // 1
-    // const queryData = `${state.data.query}-${state.data.orientation}`
-    // if (!state.queries.includes(queryData)) {
-    //   state.queries.push(`${state.data.query}-${state.data.orientation}`)
-    // }
+
+    state.data.photos.forEach(photo => {
+      state.likedPhotos.photos.forEach(likedPhoto => {
+        if (photo.id === likedPhoto.id) {
+          photo.LIKED = likedPhoto.id
+        }
+      })
+    })
   },
-  [mutatuionTypes.searchPhotosFailure](state, payload) {
+  [mutationTypes.searchPhotosFailure](state, payload) {
     state.error = payload
     state.isLoading = false
+  },
+
+  [mutationTypes.likePhotoStart]() {},
+  [mutationTypes.likePhotoSuccess](state, payload) {
+    if (!state.data) state.data = state.likedPhotos.photos
+    const likedPhoto = state.data.photos.filter(
+      photo => photo.id === payload.id
+    )
+    if (!likedPhoto[0].LIKED) {
+      likedPhoto[0].LIKED = !likedPhoto[0].LIKED
+      setItem(likedPhoto[0].id, likedPhoto[0])
+      state.likedPhotos.photos.push(getItem(likedPhoto[0].id))
+    } else {
+      state.likedPhotos.photos = state.likedPhotos.photos.filter(
+        photo => photo.id !== getItem(likedPhoto[0].id).id
+      )
+      likedPhoto[0].LIKED = !likedPhoto[0].LIKED
+      removeItem(likedPhoto[0].id)
+    }
+  },
+  [mutationTypes.likePhotoFailure](state, payload) {
+    state.error = payload
+  },
+
+  [mutationTypes.getLocalStorageStart]() {},
+  [mutationTypes.getLocalStorageSuccess](state) {
+    // const LSkeys = Object.keys(localStorage)
+    // for (const key of LSkeys) {
+    //   const data = getItem(key)
+    //   if (data && data.id === key) {
+    //     state.likedPhotos.photos.push(data)
+    //   }
+    //   // console.log(key)
+    //   // console.log(data)
+    // }
+    LSPhotos(state)
+  },
+  [mutationTypes.getLocalStorageFailure]() {}
+}
+
+const getters = {
+  [getterTypes.favorites]: state => {
+    // if (state.data) {
+    //   return state.data.photos.filter(photo => photo.LIKED === true)
+    // }
+    return state.likedPhotos.photos
   }
 }
 
 const actions = {
   [actionTypes.searchPhotos](context, { query, orientation }) {
     return new Promise(resolve => {
-      context.commit(mutatuionTypes.searchPhotosStart)
+      context.commit(mutationTypes.searchPhotosStart)
       apiUnsplashSearch
         .searchPhotos(query, orientation)
         .then(photos => {
@@ -50,20 +115,37 @@ const actions = {
             query,
             orientation
           }
-          context.commit(mutatuionTypes.searchPhotosSuccess, result)
-          // console.log(result)
+          context.commit(mutationTypes.searchPhotosSuccess, result)
           resolve(result)
         })
         .catch(e => {
           console.log(e)
-          context.commit(mutatuionTypes.searchPhotosFailure, e)
+          context.commit(mutationTypes.searchPhotosFailure, e)
         })
     })
+  },
+
+  [actionTypes.likePhoto](context, { id }) {
+    return new Promise(() => {
+      context.commit(mutationTypes.likePhotoStart)
+      if (id) {
+        context.commit(mutationTypes.likePhotoSuccess, { id })
+      } else {
+        context.commit(mutationTypes.likePhotoFailure, 'no id of photo')
+      }
+    })
+  },
+
+  [actionTypes.getLocalStorage](context) {
+    context.commit(mutationTypes.getLocalStorageStart)
+    context.commit(mutationTypes.getLocalStorageSuccess)
+    context.commit(mutationTypes.getLocalStorageFailure)
   }
 }
 
 export default {
   state,
   actions,
-  mutations
+  mutations,
+  getters
 }
