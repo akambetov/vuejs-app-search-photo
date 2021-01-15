@@ -19,13 +19,3 @@ export const getItem = key => {
     console.log('Error getting data in localStorage', e)
   }
 }
-
-export const LSPhotos = state => {
-  const LSkeys = Object.keys(localStorage)
-  for (const key of LSkeys) {
-    const data = getItem(key)
-    if (data && data.id === key) {
-      state.likedPhotos.photos.push(data)
-    }
-  }
-}
