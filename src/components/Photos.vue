@@ -1,7 +1,8 @@
 <template>
   <div class="row row-cols-1 row-cols-md-2">
     <div
-      v-for="photo in photos"
+      v-for="photo in photos.photos"
+      v-show="show(photo, photos)"
       :key="photo.id"
       class="col mb-4"
       :class="{ liked: photo.LIKED }"
@@ -56,11 +57,22 @@ export default {
   name: 'PhPhotos',
   props: {
     photos: {
-      type: Array,
+      type: Object,
+      required: true
+    },
+    fromComponent: {
+      type: String,
       required: true
     }
   },
   methods: {
+    show(photo, photos) {
+      if (this.fromComponent === 'Home') {
+        return photo.QUERY === photos.query
+      } else if (this.fromComponent === 'Favorites') {
+        return true
+      }
+    },
     likePhoto(id) {
       this.$store.dispatch(actionTypes.likePhoto, { id })
     }

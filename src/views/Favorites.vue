@@ -1,5 +1,9 @@
 <template>
-  <ph-photos v-if="favorites" :photos="favorites" />
+  <ph-photos
+    v-if="favorites"
+    :photos="favorites"
+    :from-component="'Favorites'"
+  />
 </template>
 
 <script>

@@ -47,7 +47,7 @@ const mutations = {
     state.data.photos.forEach(photo => {
       state.likedPhotos.photos.forEach(likedPhoto => {
         if (photo.id === likedPhoto.id) {
-          photo.LIKED = likedPhoto.id
+          photo.LIKED = likedPhoto.LIKED
         }
       })
     })
@@ -92,15 +92,26 @@ const mutations = {
   [mutationTypes.getLocalStorageFailure]() {},
 
   [mutationTypes.oldQueryFavorites](state) {
-    state.likedPhotos.photos.forEach(photo => {
-      state.data.photos.push(photo)
-    })
+    const liked = state.likedPhotos.photos
+    const photos = state.data.photos
+    let matching = false
+    for (let i = 0; i < liked.length; i++) {
+      for (let j = 0; j < photos.length; j++) {
+        if (liked[i].id === photos[j].id) {
+          matching = true
+          break
+        }
+      }
+      if (!matching) {
+        state.data.photos.unshift(liked[i])
+      }
+    }
   }
 }
 
 const getters = {
   [getterTypes.favorites]: state => {
-    return state.likedPhotos.photos
+    return { photos: state.likedPhotos.photos }
   }
 }
 

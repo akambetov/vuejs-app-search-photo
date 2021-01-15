@@ -1,7 +1,7 @@
 <template>
   <div>
     <ph-search-form />
-    <ph-photos v-if="photos" :photos="photos.photos" />
+    <ph-photos v-if="photos" :photos="photos" :from-component="'Home'" />
   </div>
 </template>
 <script>

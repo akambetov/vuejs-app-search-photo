@@ -8,6 +8,7 @@ const searchPhotos = (query, orientation) =>
     .then(response => {
       response.data.results.forEach(result => {
         result.LIKED = false
+        result.QUERY = query
       })
       return response.data.results
     })
