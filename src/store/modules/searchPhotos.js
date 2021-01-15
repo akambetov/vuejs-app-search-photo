@@ -1,11 +1,10 @@
 import apiUnsplashSearch from '@/api/unsplash'
-import { setItem, removeItem, getItem, LSPhotos } from '@/utils/localStorage'
+import { setItem, removeItem, getItem } from '@/utils/localStorage'
 
 const state = {
   isLoading: false,
   data: null,
   likedPhotos: { photos: [] },
-  // photoIDs: [],
   error: null
 }
 
@@ -20,7 +19,9 @@ export const mutationTypes = {
 
   getLocalStorageStart: '[searchPhotos] Initalize Local Storage start',
   getLocalStorageSuccess: '[searchPhotos] Initalize Local Storage success',
-  getLocalStorageFailure: '[searchPhotos] Initalize Local Storage failure'
+  getLocalStorageFailure: '[searchPhotos] Initalize Local Storage failure',
+
+  oldQueryFavorites: '[searchPhotos] Add favorites from old query to state.data'
 }
 
 export const actionTypes = {
@@ -80,25 +81,25 @@ const mutations = {
 
   [mutationTypes.getLocalStorageStart]() {},
   [mutationTypes.getLocalStorageSuccess](state) {
-    // const LSkeys = Object.keys(localStorage)
-    // for (const key of LSkeys) {
-    //   const data = getItem(key)
-    //   if (data && data.id === key) {
-    //     state.likedPhotos.photos.push(data)
-    //   }
-    //   // console.log(key)
-    //   // console.log(data)
-    // }
-    LSPhotos(state)
+    const LSkeys = Object.keys(localStorage)
+    for (const key of LSkeys) {
+      const data = getItem(key)
+      if (data && data.id === key) {
+        state.likedPhotos.photos.push(data)
+      }
+    }
   },
-  [mutationTypes.getLocalStorageFailure]() {}
+  [mutationTypes.getLocalStorageFailure]() {},
+
+  [mutationTypes.oldQueryFavorites](state) {
+    state.likedPhotos.photos.forEach(photo => {
+      state.data.photos.push(photo)
+    })
+  }
 }
 
 const getters = {
   [getterTypes.favorites]: state => {
-    // if (state.data) {
-    //   return state.data.photos.filter(photo => photo.LIKED === true)
-    // }
     return state.likedPhotos.photos
   }
 }
@@ -116,6 +117,7 @@ const actions = {
             orientation
           }
           context.commit(mutationTypes.searchPhotosSuccess, result)
+          context.commit(mutationTypes.oldQueryFavorites)
           resolve(result)
         })
         .catch(e => {
@@ -139,7 +141,6 @@ const actions = {
   [actionTypes.getLocalStorage](context) {
     context.commit(mutationTypes.getLocalStorageStart)
     context.commit(mutationTypes.getLocalStorageSuccess)
-    context.commit(mutationTypes.getLocalStorageFailure)
   }
 }
 
