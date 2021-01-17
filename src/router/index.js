@@ -20,6 +20,12 @@ const routes = [
     name: 'favorites',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Favorites.vue')
+  },
+  {
+    path: '/history',
+    name: 'history',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/History.vue')
   }
   // {
   //   path: '/about',
