@@ -1,5 +1,6 @@
 import apiUnsplashSearch from '@/api/unsplash'
 import { setItem, removeItem, getItem } from '@/utils/localStorage'
+import { actionTypes as historyActionTypes } from '@/store/modules/history'
 
 const state = {
   isLoading: false,
@@ -129,10 +130,14 @@ const actions = {
           }
           context.commit(mutationTypes.searchPhotosSuccess, result)
           context.commit(mutationTypes.oldQueryFavorites)
+          context.dispatch(historyActionTypes.putHistory, {
+            query,
+            orientation
+          })
           resolve(result)
         })
         .catch(e => {
-          console.log(e)
+          console.error(e)
           context.commit(mutationTypes.searchPhotosFailure, e)
         })
     })
