@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import searchPhotos from '@/store/modules/searchPhotos'
+import history from '@/store/modules/history'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -8,6 +9,7 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    searchPhotos
+    searchPhotos,
+    history
   }
 })
