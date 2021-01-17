@@ -12,6 +12,11 @@
             Favorites
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'history' }" class="nav-link">
+            History
+          </router-link>
+        </li>
       </ul>
     </div>
   </nav>
