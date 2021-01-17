@@ -1,3 +1,10 @@
+export const getItem = key => {
+  try {
+    return JSON.parse(localStorage.getItem(key))
+  } catch (e) {
+    console.log('Error getting data in localStorage', e)
+  }
+}
 export const setItem = (key, data) => {
   try {
     localStorage.setItem(key, JSON.stringify(data))
@@ -10,12 +17,5 @@ export const removeItem = key => {
     localStorage.removeItem(key)
   } catch (e) {
     console.log('Error removing data in localStorage', e)
-  }
-}
-export const getItem = key => {
-  try {
-    return JSON.parse(localStorage.getItem(key))
-  } catch (e) {
-    console.log('Error getting data in localStorage', e)
   }
 }

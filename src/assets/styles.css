@@ -46,3 +46,8 @@
 .liked .like__button:hover .like__icon {
   fill: #F6F03D;
 }
+.history-item:hover {
+  background-color: #6C757D;
+  color: aliceblue;
+  cursor: pointer;
+}

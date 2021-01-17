@@ -1,16 +1,46 @@
 <template>
-  <div class="list-group">
+  <div>
+    <ul class="list-group list-group-flush">
+      <li
+        v-for="(query, idx) in historyQueries"
+        :key="idx"
+        class="list-group-item history-item d-flex justify-content-between"
+        @click="historySearch(query.query, query.orientation, $event)"
+      >
+        <span>
+          Your query: <strong>{{ query.query }}</strong
+          >, orientation <strong>{{ query.orientation }}</strong>
+        </span>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="removeCurrent(idx)"
+        >
+          Remove
+        </button>
+      </li>
+    </ul>
     <button
-      v-for="(query, idx) in historyQueries"
-      :key="idx"
+      v-if="historyQueries && historyQueries.length"
       type="button"
-      class="list-group-item list-group-item-action"
-      @click="historySearch(query.query, query.orientation)"
+      class="btn btn-danger"
+      @click="removeAll"
     >
-      Your query: <strong>{{ query.query }}</strong
-      >, orientation <strong>{{ query.orientation }}</strong>
-      <!-- .active disabled-->
+      Remove All
     </button>
+
+    <div class="list-group">
+      <!-- <button
+        v-for="(query, idx) in historyQueries"
+        :key="idx"
+        type="button"
+        class="list-group-item list-group-item-action"
+        @click="historySearch(query.query, query.orientation)"
+      >
+        Your query: <strong>{{ query.query }}</strong
+        >, orientation <strong>{{ query.orientation }}</strong>
+      </button> -->
+    </div>
   </div>
 </template>
 <script>
@@ -25,7 +55,8 @@ export default {
     })
   },
   methods: {
-    historySearch(query, orientation) {
+    historySearch(query, orientation, event) {
+      if (event.target.tagName === 'BUTTON') return
       this.$store.dispatch(searchActionTypes.searchPhotos, {
         query,
         orientation
@@ -34,6 +65,12 @@ export default {
         name: 'results',
         params: { query: `${query}-${orientation}` }
       })
+    },
+    removeCurrent(idx) {
+      this.$store.dispatch(historyActionTypes.removeHistory, idx)
+    },
+    removeAll() {
+      this.$store.dispatch(historyActionTypes.removeAllHistory)
     }
   },
   mounted() {
