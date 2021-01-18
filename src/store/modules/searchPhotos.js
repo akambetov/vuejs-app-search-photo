@@ -60,7 +60,7 @@ const mutations = {
 
   [mutationTypes.likePhotoStart]() {},
   [mutationTypes.likePhotoSuccess](state, payload) {
-    if (!state.data) state.data = state.likedPhotos.photos
+    if (!state.data) state.data = state.likedPhoto
     const likedPhoto = state.data.photos.filter(
       photo => photo.id === payload.id
     )
