@@ -1,6 +1,7 @@
 import apiUnsplashSearch from '@/api/unsplash'
 import { setItem, removeItem, getItem } from '@/utils/localStorage'
 import { actionTypes as historyActionTypes } from '@/store/modules/history'
+import { match } from '@/utils/match.js'
 
 const state = {
   isLoading: false,
@@ -48,6 +49,7 @@ const mutations = {
         if (photo.id === likedPhoto.id) photo.LIKED = true
       })
     })
+    setItem('lastQuery', state.data)
   },
   [mutationTypes.searchPhotosFailure](state, payload) {
     state.error = payload
@@ -90,20 +92,16 @@ const mutations = {
   [mutationTypes.getLocalStorageFailure]() {},
 
   [mutationTypes.oldQueryFavorites](state) {
+    if (!state.data) {
+      const lastQuery = getItem('lastQuery')
+      state.data = lastQuery
+      const liked = state.likedPhotos.photos
+      const photos = state.data.photos
+      match({ liked, photos, store: state.data.photos })
+    }
     const liked = state.likedPhotos.photos
     const photos = state.data.photos
-    let matching = false
-    for (let i = 0; i < liked.length; i++) {
-      for (let j = 0; j < photos.length; j++) {
-        if (liked[i].id === photos[j].id) {
-          matching = true
-          break
-        }
-      }
-      if (!matching) {
-        state.data.photos.unshift(liked[i])
-      }
-    }
+    match({ liked, photos, store: state.data.photos })
   }
 }
 
@@ -126,7 +124,6 @@ const actions = {
             orientation
           }
           context.commit(mutationTypes.searchPhotosSuccess, result)
-          context.commit(mutationTypes.oldQueryFavorites)
           context.dispatch(historyActionTypes.putHistory, {
             query,
             orientation
@@ -145,7 +142,6 @@ const actions = {
       context.commit(mutationTypes.likePhotoStart)
       if (id) {
         context.commit(mutationTypes.likePhotoSuccess, { id })
-        context.commit(mutationTypes.oldQueryFavorites)
       } else {
         context.commit(mutationTypes.likePhotoFailure, 'no id of photo')
       }

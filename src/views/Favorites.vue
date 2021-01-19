@@ -8,7 +8,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getterTypes } from '@/store/modules/searchPhotos'
+import {
+  getterTypes,
+  mutationTypes as searchMutationTypes
+} from '@/store/modules/searchPhotos'
 import PhPhotos from '@/components/Photos'
 export default {
   name: 'PhFavorites',
@@ -19,6 +22,9 @@ export default {
     ...mapGetters({
       favorites: getterTypes.favorites
     })
+  },
+  mounted() {
+    this.$store.commit(searchMutationTypes.oldQueryFavorites)
   }
 }
 </script>
