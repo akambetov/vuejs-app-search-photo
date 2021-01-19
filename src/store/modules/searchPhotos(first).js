@@ -37,15 +37,19 @@ export const getterTypes = {
 
 const mutations = {
   [mutationTypes.searchPhotosStart](state) {
+    state.data = null
     state.isLoading = true
     state.error = null
   },
   [mutationTypes.searchPhotosSuccess](state, payload) {
-    state.isLoading = false
     state.data = payload
+    state.isLoading = false
+
     state.data.photos.forEach(photo => {
       state.likedPhotos.photos.forEach(likedPhoto => {
-        if (photo.id === likedPhoto.id) photo.LIKED = true
+        if (photo.id === likedPhoto.id) {
+          photo.LIKED = likedPhoto.LIKED
+        }
       })
     })
   },
@@ -54,20 +58,19 @@ const mutations = {
     state.isLoading = false
   },
 
-  [mutationTypes.likePhotoStart](state) {
-    if (!state.data) state.data = state.likedPhotos
-  },
+  [mutationTypes.likePhotoStart]() {},
   [mutationTypes.likePhotoSuccess](state, payload) {
+    if (!state.data) state.data = state.likedPhoto
     const likedPhoto = state.data.photos.filter(
       photo => photo.id === payload.id
     )
     if (!likedPhoto[0].LIKED) {
       likedPhoto[0].LIKED = !likedPhoto[0].LIKED
       setItem(likedPhoto[0].id, likedPhoto[0])
-      state.likedPhotos.photos.push(likedPhoto[0])
+      state.likedPhotos.photos.push(getItem(likedPhoto[0].id))
     } else {
       state.likedPhotos.photos = state.likedPhotos.photos.filter(
-        photo => photo.id !== likedPhoto[0].id
+        photo => photo.id !== getItem(likedPhoto[0].id).id
       )
       likedPhoto[0].LIKED = !likedPhoto[0].LIKED
       removeItem(likedPhoto[0].id)
@@ -145,7 +148,6 @@ const actions = {
       context.commit(mutationTypes.likePhotoStart)
       if (id) {
         context.commit(mutationTypes.likePhotoSuccess, { id })
-        context.commit(mutationTypes.oldQueryFavorites)
       } else {
         context.commit(mutationTypes.likePhotoFailure, 'no id of photo')
       }
