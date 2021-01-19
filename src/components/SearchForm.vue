@@ -58,11 +58,7 @@ export default {
   },
   methods: {
     searchPhotos() {
-      // console.log(this.search)
-      // console.log(this.photos)
       const query = `${this.search}-${this.orientation}`
-      // console.log(`query: ${query}`)
-      // console.log(`route: ${this.$route.params.query}`)
       if (this.$route.params.query === query || !this.search) return
       const searchParams = {
         query: this.search,
