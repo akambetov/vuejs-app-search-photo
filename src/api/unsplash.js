@@ -1,5 +1,5 @@
 import axios from '@/api/axios'
-const accesKey = 'CLm726DrWmYpdLZNXqFca8gKfO7RZLWT6dtbzByYoNI'
+const accesKey = process.env.VUE_APP_UNSPLASH
 const searchPhotos = (query, orientation) =>
   axios
     .get(
